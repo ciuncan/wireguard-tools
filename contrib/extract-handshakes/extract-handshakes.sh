@@ -19,7 +19,7 @@ case "$(uname -m)" in
 esac
 
 ARGS=( )
-REGEX=".*: idxadd: .*"
+REGEX=""
 for key in "${!OFFSETS[@]}"; do
 	values="${OFFSETS[$key]}"
 	values=( ${values//,/ } )
@@ -43,7 +43,7 @@ turn_off() {
 }
 
 trap turn_off INT TERM EXIT
-echo "p:wireguard/idxadd index_hashtable_insert ${ARGS[*]}" >> /sys/kernel/debug/tracing/kprobe_events
+echo "p:wireguard/idxadd wg_index_hashtable_insert ${ARGS[*]}" >> /sys/kernel/debug/tracing/kprobe_events
 echo 1 > /sys/kernel/debug/tracing/events/wireguard/idxadd/enable
 
 unpack_u64() {
@@ -66,6 +66,10 @@ unpack_u64() {
 }
 
 while read -r line; do
+  echo ""
+  echo ""
+  echo "[$(date)] Got line $line"
+	[[ $line =~ wg_index_hashtable_insert ]] || continue
 	[[ $line =~ $REGEX ]] || continue
 	echo "New handshake session:"
 	j=1
