@@ -1,5 +1,6 @@
 ifeq ($(KERNELRELEASE),)
-KERNELDIR ?= /lib/modules/$(shell uname -r)/build
+# KERNELDIR ?= /lib/modules/$(shell uname -r)/build
+KERNELDIR ?= ../../wireguard-linux-compat/src
 PWD := $(shell pwd)
 CFLAGS ?= -O3 -march=native
 CFLAGS += -Wall -pedantic -std=gnu11
